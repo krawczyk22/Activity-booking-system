@@ -1,0 +1,25 @@
+{
+  "name": "apiassignmentbackend",
+  "version": "1.0.0",
+  "description": "api assignment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.coventry.ac.uk/krawczy5/apiassignmentbackend.git"
+  },
+  "keywords": [
+    "api",
+    "assignment"
+  ],
+  "author": "Michal Krawczykowski, Adrian Hasik",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.8.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "nodemon": "^1.19.3"
+  }
+}
