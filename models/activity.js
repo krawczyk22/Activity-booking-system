@@ -69,3 +69,22 @@ exports.deleteActivity = async (activity) => {
     }
 }
 
+//updating an activity
+exports.updateActivity = async (id, activity) => {
+    try {
+    
+        const connection = await mysql.createConnection(info.config);
+    
+        //this is the sql statement to execute
+        let sql = `UPDATE activity SET ? WHERE ID = ${id}`;
+
+        let data = await connection.query(sql, activity);
+        
+        await connection.end();
+        return data;
+    
+    } catch (error) {
+        console.log(error);
+        ctx.throw(500, 'An Error has occured');
+    }
+}

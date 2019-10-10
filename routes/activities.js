@@ -30,4 +30,14 @@ router.delete('/delete/:id', async (cnx, next) =>{
     cnx.body = {message:"deleted successfully"};
 });
 
+//updating activities by their ids
+router.put('/put/:id', bodyParser(), async (cnx, next) =>{
+    let id = cnx.params.id;
+    let updateActivity = {title:cnx.request.body.title, description:cnx.request.body.description, 
+        url:cnx.request.body.url, location:cnx.request.body.location
+    };
+    await model.updateActivity(id, updateActivity);
+    cnx.body = {message:"updated successfully"};
+});
+
 module.exports = router;
