@@ -1,22 +1,22 @@
 //import koa
 var Koa = require('koa');
-//import koa-router which is used to route user request to its path
-var Router = require('koa-router');
-//import koa-body parser whic his used to extract parameters from requests
+
+//import all the routes
+var welcome = require('./routes/welcome.js');
+var admin = require('./routes/admin.js');
+var users = require('./routes/users.js');
 
 //create a koa instance and store it in app variable
 var app = new Koa();
 
-var router = new Router();
+////apply the routes as a middleware
+app.use(welcome.routes());
+app.use(admin.routes());
+app.use(users.routes());
 
-router.get('/api/v1.0', welcomeAPI);
-
-//use the root routes
-app.use(router.routes());
+//if there is no environment variable set for port number
+//use a default value of 3000
+var port = process.env.PORT || 3000;
 
 //run the werver on port 3000
-app.listen(3000);
-function welcomeAPI(cnx, next){
-
-cnx.body = {message:'Welcome to Oktob API version 1.0'};
-}
+app.listen(port);
