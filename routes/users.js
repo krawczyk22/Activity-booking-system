@@ -15,16 +15,16 @@ router.get('/', async (cnx, next) => {
 });
 
 //the id should be a number greater than or equal 1
-router.get('/:id', async (cnx, next) =>{
-   let id = cnx.params.id;
-   cnx.body = await model.getPasswordByUsername(id);
+router.get('/:username', async (cnx, next) =>{
+   let username = cnx.params.username;
+   cnx.body = await model.getPasswordByUsername(username);
 });
 
 //note that we have injected the body parser onlyin the POST request
 router.post('/', bodyParser(), async (cnx, next) =>{
-   let newUser = {username:cnx.request.body.title, password:cnx.request.body.allText
+   let newUser = {username:cnx.request.body.username, password:cnx.request.body.password
    };
-   await model.add(newUser);
+   await model.addUser(newUser);
    cnx.body = {message:"added successfully"};
    });
 

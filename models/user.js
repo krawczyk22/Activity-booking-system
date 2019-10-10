@@ -10,10 +10,10 @@ exports.getPasswordByUsername = async (username) => {
 
         //this is the sql statement to execute
         let sql = `SELECT password FROM users
-            WHERE username = ${username}
+            WHERE username = ?
             `;
         //wait for the async code to finish
-        let data = await connection.query(sql);
+        let data = await connection.query(sql, username);
 
         //wait until connection to db is closed
         await connection.end();
@@ -54,11 +54,9 @@ exports.addUser = async (user) => {
         const connection = await mysql.createConnection(info.config);
     
         //this is the sql statement to execute
-        let sql = `INSERT INTO users
-            SET ?
-            `;
+        let sql = `INSERT INTO users SET ?`;
 
-        let data = await connection.query(sql);
+        let data = await connection.query(sql, user);
         
         await connection.end();
         
