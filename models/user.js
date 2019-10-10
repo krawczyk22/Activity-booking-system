@@ -67,3 +67,22 @@ exports.addUser = async (user) => {
         ctx.throw(500, 'An Error has occured');
     }
 }
+
+exports.loginCheck = async (username) => {
+    try {
+    
+        const connection = await mysql.createConnection(info.config);
+    
+        //this is the sql statement to execute
+        let sql = `SELECT password FROM users WHERE username = ?`;
+
+        let data = await connection.query(sql, username);
+        
+        await connection.end();
+        return data;
+    
+    } catch (error) {
+        console.log(error);
+        ctx.throw(500, 'An Error has occured');
+    }
+}
