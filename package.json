@@ -21,6 +21,7 @@
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "nodemon": "^1.19.3",
+    "password-hash": "^1.2.2",
     "promise-mysql": "^4.1.1"
   }
 }
