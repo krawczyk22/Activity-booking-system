@@ -17,11 +17,14 @@ function App(props) {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav pullRight>
-            <LinkContainer to="/signup">
-              <NavItem>Signup</NavItem>
+            <LinkContainer to="/activities">
+              <NavItem>Activities</NavItem>
             </LinkContainer>
             <LinkContainer to="/login">
               <NavItem>Login</NavItem>
+            </LinkContainer>
+            <LinkContainer to="/signup">
+              <NavItem>Signup</NavItem>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>
