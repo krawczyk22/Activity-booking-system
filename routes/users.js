@@ -25,7 +25,6 @@ router.get('/get/:username', async (cnx, next) =>{
 router.post('/insert/', bodyParser(), async (cnx, next) =>{
    var hash = crypto.createHash('sha256').update(cnx.request.body.password).digest('hex');
    let newUser = {username:cnx.request.body.username, password:hash};
-   console.log(newUser);
    await model.addUser(newUser);
    cnx.body = {message:"added successfully"};
 });

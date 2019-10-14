@@ -1,7 +1,7 @@
 var mysql = require('promise-mysql');
 var info = require('../config.js');
 
-//get an article by its id
+//get password by usernames id
 exports.getPasswordByUsername = async (username) => {
     try {
 
