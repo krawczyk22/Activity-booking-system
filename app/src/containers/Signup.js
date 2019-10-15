@@ -42,7 +42,7 @@ class RegistrationForm extends React.Component {
     });
   };
 
-  handleEmail = ()=> {
+  handleUsername = ()=> {
     this.setState({responseStatus:"nothing"}) 
   }
 
@@ -125,7 +125,7 @@ class RegistrationForm extends React.Component {
               required: true,
               message: 'Please input your username!', },
             ],
-          })(<Input onChange={this.handleEmail} />
+          })(<Input onChange={this.handleUsername} />
           )}
           </Form.Item>
           <Form.Item label="Password" hasFeedback>
