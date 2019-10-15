@@ -28,9 +28,9 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
    console.log(cnx.request.body);
 
    let newUser = {
-      username:cnx.request.body.username, 
-      password:cnx.request.body.password,
-      passwordConfirmation:cnx.request.body.passwordConfirmation
+      username:cnx.request.body.values.username, 
+      password:cnx.request.body.values.password,
+      passwordConfirmation:cnx.request.body.values.passwordConfirmation
    };
    try {
       await model.addUser(newUser);

@@ -1,5 +1,6 @@
 //import koa
 var Koa = require('koa');
+const cors = require('@koa/cors');
 
 //import all the routes
 var welcome = require('./routes/welcome.js');
@@ -10,7 +11,7 @@ var tags = require('./routes/tags.js');
 
 //create a koa instance and store it in app variable
 var app = new Koa();
-
+app.use(cors());
 ////apply the routes as a middleware
 app.use(welcome.routes());
 app.use(admin.routes());
