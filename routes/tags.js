@@ -20,7 +20,7 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
  });
 
  //updating tags by their ids
-router.put('/put/:id', bodyParser(), async (cnx, next) =>{
+router.put('/put/:id([0-9]{1,})', bodyParser(), async (cnx, next) =>{
     let id = cnx.params.id;
     let updateTagRequest = {accepted:cnx.request.body.accepted};
     await model.updateTagRequest(id, updateTagRequest);

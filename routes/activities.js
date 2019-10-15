@@ -9,7 +9,7 @@ var router = Router({
 var bodyParser = require('koa-bodyparser');
 
 //getting the activities by their ids
-router.get('/get/:id', async (cnx, next) =>{
+router.get('/get/:id([0-9]{1,})', async (cnx, next) =>{
    let id = cnx.params.id;
    cnx.body = await model.getActivityById(id);
 });
@@ -24,14 +24,14 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
 });
 
 //deleting activities by their ids
-router.delete('/delete/:id', async (cnx, next) =>{
+router.delete('/delete/:id([0-9]{1,})', async (cnx, next) =>{
     let id = cnx.params.id;
     await model.deleteActivity(id);
     cnx.body = {message:"deleted successfully"};
 });
 
 //updating activities by their ids
-router.put('/put/:id', bodyParser(), async (cnx, next) =>{
+router.put('/put/:id([0-9]{1,})', bodyParser(), async (cnx, next) =>{
     let id = cnx.params.id;
     let updateActivity = {title:cnx.request.body.title, description:cnx.request.body.description, 
         url:cnx.request.body.url, location:cnx.request.body.location
