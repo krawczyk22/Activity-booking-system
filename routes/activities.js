@@ -16,8 +16,14 @@ router.get('/get/:id([0-9]{1,})', async (cnx, next) =>{
 
 //inserting activities along with their description
 router.post('/insert/', bodyParser(), async (cnx, next) =>{
-   let newActivity = {title:cnx.request.body.title, description:cnx.request.body.description, 
-        url:cnx.request.body.url, location:cnx.request.body.location
+    
+    console.log(cnx.request.body);
+
+    let newActivity = {
+        title:cnx.request.body.values.title, 
+        description:cnx.request.body.values.description, 
+        url:cnx.request.body.values.url, 
+        location:cnx.request.body.values.location
     };
     await model.addActivity(newActivity);
     cnx.body = {message:"added successfully"};
