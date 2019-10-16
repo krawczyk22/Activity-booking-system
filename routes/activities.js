@@ -14,6 +14,11 @@ router.get('/get/:id([0-9]{1,})', async (cnx, next) =>{
    cnx.body = await model.getActivityById(id);
 });
 
+router.get('/getactivities/:id([0-9]{1,})', async (cnx, next) =>{
+    let id = cnx.params.id;
+    cnx.body = await model.getActivityByUser(id);
+ });
+
 //inserting activities along with their description
 router.post('/insert/', bodyParser(), async (cnx, next) =>{
     
