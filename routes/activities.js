@@ -14,6 +14,7 @@ router.get('/get/:id([0-9]{1,})', async (cnx, next) =>{
    cnx.body = await model.getActivityById(id);
 });
 
+//getting all the activities by their ids
 router.get('/getactivities/:id([0-9]{1,})', async (cnx, next) =>{
     let id = cnx.params.id;
     cnx.body = await model.getActivityByUser(id);
@@ -24,6 +25,7 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
     
     console.log(cnx.request.body);
 
+    //creating a variable that holds the information provided by the user
     let newActivity = {
         title:cnx.request.body.values.title, 
         description:cnx.request.body.values.description, 
@@ -32,10 +34,13 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
         taggeduserid:cnx.request.body.values.taggeduserid
     };
     try {
+        //calling the function and passing the data to it
         await model.addActivity(newActivity);
         cnx.response.status = 201;
+        //if successful, the message is passed to the frontend
         cnx.body = {message:"user was added successfully"};
     } catch(error) {
+        //if not successful then the error message is passed to the frontend
         cnx.response.status = error.status;
         cnx.body = {message:error.message};
      }
@@ -43,18 +48,27 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
 
 //deleting activities by their ids
 router.delete('/delete/:id([0-9]{1,})', async (cnx, next) =>{
+    //creating a variable that holds the information provided by the user
     let id = cnx.params.id;
+    //calling the function and passing the data to it
     await model.deleteActivity(id);
+    //if successful, the message is passed to the frontend
     cnx.body = {message:"deleted successfully"};
 });
 
 //updating activities by their ids
 router.put('/put/:id([0-9]{1,})', bodyParser(), async (cnx, next) =>{
+    //creating a variable that holds the information provided by the user
     let id = cnx.params.id;
-    let updateActivity = {title:cnx.request.body.title, description:cnx.request.body.description, 
-        url:cnx.request.body.url, location:cnx.request.body.location
+    let updateActivity = {
+        title:cnx.request.body.title, 
+        description:cnx.request.body.description, 
+        url:cnx.request.body.url, 
+        location:cnx.request.body.location
     };
+    //calling the function and passing the data to it
     await model.updateActivity(id, updateActivity);
+    //if successful, the message is passed to the frontend
     cnx.body = {message:"updated successfully"};
 });
 

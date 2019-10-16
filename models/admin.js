@@ -1,6 +1,7 @@
 var mysql = require('promise-mysql');
 var info = require('../config.js');
 
+//creating the tables
 exports.createTables = async (id)=> {
 
     try {
@@ -11,6 +12,7 @@ exports.createTables = async (id)=> {
             ID INT NOT NULL AUTO_INCREMENT,
             username TEXT,
             password TEXT,
+            salt TEXT,
             PRIMARY KEY (ID)
             )`;
         await connection.query(sql);
@@ -55,11 +57,13 @@ exports.createTables = async (id)=> {
             datemodified DATETIME,
             PRIMARY KEY (ID)
             )`;
+        //executing the query
         await connection.query(sql);
 
         return {message:"created successfully"};
 
     } catch (error) {
+        //cating theerrors if the occure
         console.log(error);
         ctx.throw(500, 'An Error has occured');
     }
