@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Nav, Navbar, NavItem } from "react-bootstrap";
 import "./App.css";
 import Routes from "./Routes";
+import "antd/dist/antd.css";
 
 function App(props) {
   return (
@@ -11,7 +12,7 @@ function App(props) {
       <Navbar fluid collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to="/">Scratch</Link>
+            <Link to="/">API</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
@@ -19,6 +20,9 @@ function App(props) {
           <Nav pullRight>
             <LinkContainer to="/activities">
               <NavItem>Activities</NavItem>
+            </LinkContainer>
+            <LinkContainer to="/tags">
+              <NavItem>Tags</NavItem>
             </LinkContainer>
             <LinkContainer to="/login">
               <NavItem>Login</NavItem>

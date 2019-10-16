@@ -1,8 +1,9 @@
 import React from "react";
 import "./Activities.css";
 import { Form, Input, Alert, Button } from "antd";
+import {Upload} from "antd";
 
-class RegistrationForm extends React.Component {
+class ActivityForm extends React.Component {
   state = {
     confirmDirty: false,
     addedSucessfully: false, //if the user is added successfully
@@ -131,17 +132,29 @@ class RegistrationForm extends React.Component {
             ],
           })(<Input onChange={this.handleThing} />)}
           </Form.Item>
+          <Form.Item label="Tag user" hasFeedback>
+          {getFieldDecorator('taggeduserid', { 
+            rules: [
+              {
+              required: false,
+              message: 'Please input the location!', },
+            ],
+          })(<Input onChange={this.handleThing} />)}
+          </Form.Item>
           <Form.Item {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">
-              Register
+              Add activity
             </Button>
           </Form.Item>
           {this.state.showSuccess ? <Alert message="activity created successfully" type="success" /> :null}
           {this.state.showError ? <Alert message={this.state.errorMessage} type="error" /> :null}
+          <Form.Item>
+            
+          </Form.Item>
         </Form>
       </div>
     );
   }
 }
-const Signup = Form.create({ name: 'register' })(RegistrationForm);
+const Signup = Form.create({ name: 'register' })(ActivityForm);
 export default Signup;

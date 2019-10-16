@@ -1,51 +1,133 @@
-import React, { useState } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import { Auth } from "aws-amplify";
+import React from "react";
 import "./Login.css";
+import { Form, Input, Alert, Button } from "antd";
 
-export default function Login(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+class LoginForm extends React.Component {
+  state = {
+    confirmDirty: false,
+    addedSucessfully: false, //if the user is added successfully
+    showSuccess: false, //if should we show a successful feedback message after adding a user
+    showError: false, //if should we show an error feedback message after adding a
+    errorCode: 400, //to save the errorCode we recieved from the api server
+    responseStatus: "nothing", //the validation status of the email
+    errorMessage: "" //the error message to display to the user after server rejects action
+    };
 
-  function validateForm() {
-    return username.length > 0 && password.length > 0;
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        //echo the values to the browser console to make sure they are correct
+        console.log('Received values of form: ', values);
+        //here we should send a request to our server to post the user
+        //use fetch API to post the user data
+        fetch('http://localhost:3000/api/v1.0/users/login/', { 
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', 
+          },
+          body: JSON.stringify({values}) 
+        }).then(res => {
+          if(res.ok) 
+            this.setState({addedSucessfully:true})
+          else 
+            this.setState({
+              addedSucessfully:false,
+              errorCode: res.status
+            });
+          return res.json()
+        }).then(data => this.checkResponse(data))
+      } 
+    });
+  };
+
+  handleThing = ()=> {
+    this.setState({responseStatus:"nothing"}) 
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-  
-    try {
-      await Auth.signIn(username, password);
-      props.userHasAuthenticated(true);
-    } catch (e) {
-      alert(e.message);
+  checkResponse = (data) => {
+    if(this.state.addedSucessfully){ 
+      this.props.form.resetFields(); 
+      this.setState({
+        showSuccess:true,
+        showError : false 
+      });
+    } else {
+      //handle errors
+      this.setState({ 
+        errorMessage: data.message, 
+        showSuccess:false, 
+        showError : true, 
+        responseStatus: "error"
+      }); 
     }
-  }
+  };
 
-  return (
-    <div className="Login">
-      <form onSubmit={handleSubmit}>
-        <FormGroup controlId="username" bsSize="large">
-          <ControlLabel>Username</ControlLabel>
-          <FormControl
-            autoFocus
-            type="username"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-          />
-        </FormGroup>
-        <FormGroup controlId="password" bsSize="large">
-          <ControlLabel>Password</ControlLabel>
-          <FormControl
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            type="password"
-          />
-        </FormGroup>
-        <Button block bsSize="large" disabled={!validateForm()} type="submit">
-          Login
-        </Button>
-      </form>
-    </div>
-  );
+  render() {
+    const { getFieldDecorator } = this.props.form;
+
+    //this code will handle form responsivness on small devices
+    const formItemLayout = {
+      labelCol: { 
+        xs: { span: 24 },
+        sm: { span: 8 },
+      }, 
+      wrapperCol: { 
+        xs: { span: 24 },
+        sm: { span: 16 },
+        }, 
+      };
+      const tailFormItemLayout = { 
+        wrapperCol: {
+          xs: { 
+            span: 24,
+            offset: 0, 
+          },
+          sm: { 
+            span: 16,
+            offset: 8, 
+          },
+        }, 
+      };
+
+    //prefix the email input with some decoration
+    return ( 
+      <div className="Login">
+        <Form {...formItemLayout} onSubmit={this.handleSubmit}>
+          <Form.Item label="Login" hasFeedback>
+          {getFieldDecorator('username', { 
+            rules: [
+              {
+              required: true,
+              message: 'Please input the username!', },
+            ],
+          })(<Input onChange={this.handleThing} />)}
+          </Form.Item>
+          <Form.Item label="Password" hasFeedback>
+            {getFieldDecorator('password', { 
+              rules: [
+                {
+                required: true,
+                message: 'Please input your password!', 
+                },
+              ],
+            })(<Input.Password />)}
+          </Form.Item>
+          <Form.Item {...tailFormItemLayout}>
+            <Button type="primary" htmlType="submit">
+              Login
+            </Button>
+          </Form.Item>
+          {this.state.showSuccess ? <Alert message="logged in  successfully" type="success" /> :null}
+          {this.state.showError ? <Alert message={this.state.errorMessage} type="error" /> :null}
+          <Form.Item>
+            
+          </Form.Item>
+        </Form>
+      </div>
+    );
+  }
 }
+const Login = Form.create({ name: 'register' })(LoginForm);
+export default Login;
