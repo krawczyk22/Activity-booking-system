@@ -44,14 +44,22 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
 
 //note that we have injected the body parser only in the POST request
 router.post('/login/', bodyParser(), async (cnx, next) =>{
-   var password = crypto.createHash('sha256').update(cnx.request.body.password).digest('hex');
-   let result = await model.loginCheck(cnx.request.body.username);
-   if(result[0].password == password) {
-      cnx.body = {message:"logged in"};
+
+   console.log(cnx.request.body);
+   
+   let newUser = {
+      username:cnx.request.body.values.username, 
+      password:cnx.request.body.values.password
+   };
+   try {
+      await model.loginCheck(newUser);
+      cnx.response.status = 201;
+      cnx.body = {message:"user was logged in"};
+   } catch(error) {
+      cnx.response.status = error.status;
+      cnx.body = {message:error.message};
    }
-   else {
-      cnx.body = {message:"not logged in"};
-   }
+
 });
 
 module.exports = router;

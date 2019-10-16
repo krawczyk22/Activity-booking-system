@@ -28,10 +28,17 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
         title:cnx.request.body.values.title, 
         description:cnx.request.body.values.description, 
         url:cnx.request.body.values.url, 
-        location:cnx.request.body.values.location
+        location:cnx.request.body.values.location,
+        taggeduserid:cnx.request.body.values.taggeduserid
     };
-    await model.addActivity(newActivity);
-    cnx.body = {message:"added successfully"};
+    try {
+        await model.addActivity(newActivity);
+        cnx.response.status = 201;
+        cnx.body = {message:"user was added successfully"};
+    } catch(error) {
+        cnx.response.status = error.status;
+        cnx.body = {message:error.message};
+     }
 });
 
 //deleting activities by their ids

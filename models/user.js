@@ -47,7 +47,7 @@ exports.addUser = async (user) => {
             }
         }
         //making sure that username should be unique and never been used in the system
-        let sql = `SELECT username from users WHERE
+        let sql = `SELECT username FROM users WHERE
             username = \'${user.username}\'`;
 
         const connection = await mysql.createConnection(info.config);
@@ -68,7 +68,8 @@ exports.addUser = async (user) => {
         //create a new object to hold users final data
         let userData = {
             username: user.username,
-            password: hash
+            password: hash,
+            salt: salt
         }
         //this is the sql statement to execute
         sql = `INSERT INTO users SET ? `;
@@ -83,21 +84,49 @@ exports.addUser = async (user) => {
     }
 }
 
-exports.loginCheck = async (username) => {
+exports.loginCheck = async (user) => {
     try {
     
-        const connection = await mysql.createConnection(info.config);
-    
-        //this is the sql statement to execute
-        let sql = `SELECT password FROM users WHERE username = ?`;
-
-        let data = await connection.query(sql, username);
+        if(user.username === undefined){
+            throw {message:'username is required', status:400}; 
+        }
+        if(user.password === undefined){
+            throw {message:'password is required', status:400}; 
+        }
+        else {
+            const connection = await mysql.createConnection(info.config);
         
-        await connection.end();
-        return data;
-    
+            //this is the sql statement to execute
+            let sql = `SELECT password, salt FROM users WHERE 
+                username = \'${user.username}\'`;
+
+            let data = await connection.query(sql);
+            await connection.end();
+
+            if(data.length)
+            {
+                if(data[0].password.length === 0)
+                    throw {message:'username not found', status:400};
+                else {    
+                    var hashFromUser = bcrypt.hashSync(user.password, data[0].salt);
+                    if(data[0].password == hashFromUser)
+                    {
+                        return data;
+                    }
+                    else 
+                    {
+                        throw {message:'password is wrong', status:400};
+                    }
+                }
+            }
+            else
+            {
+                throw {message:'username not found', status:400};
+            }
+        }
     } catch (error) {
-        console.log(error);
-        ctx.throw(500, 'An Error has occured');
+        if(error.status === undefined)
+            error.status = 500;
+        throw error;
     }
 }
