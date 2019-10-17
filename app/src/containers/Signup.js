@@ -56,7 +56,7 @@ class RegistrationForm extends React.Component {
   compareToFirstPassword = (rule, value, callback) => { 
     const { form } = this.props;
     if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!'); 
+      callback('Two passwords that you entered are inconsistent!'); 
     } else {
       callback(); 
     }
@@ -137,7 +137,7 @@ class RegistrationForm extends React.Component {
                 },
                 {
                 min: 6,
-                message: 'password should be at least 6 characters long!', },
+                message: 'The password should be at least 6 characters long!', },
                 {
                 validator: this.validateToNextPassword,
                 },

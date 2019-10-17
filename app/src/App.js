@@ -19,7 +19,10 @@ function App(props) {
         <Navbar.Collapse>
           <Nav pullRight>
             <LinkContainer to="/activities">
-              <NavItem>Activities</NavItem>
+              <NavItem>Add Activities</NavItem>
+            </LinkContainer>
+            <LinkContainer to="/activitiesView">
+              <NavItem>View Activities</NavItem>
             </LinkContainer>
             <LinkContainer to="/tags">
               <NavItem>Tags</NavItem>

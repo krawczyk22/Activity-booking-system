@@ -1,22 +1,11 @@
 @media all and (min-width: 480px) {
-    .NewActivity, .ViewActivity {
-        display:inline-block;
-        background-color: #e6e6e6;
-        padding: 60px 0;
-        width: 400px;
-    }
-
-    .NewActivity form {
-        display:inline-block;
-        margin: 0 auto;
-        max-width: 320px;
-        margin-left: 60px;
-      }
-
-    .ViewActivity form {
-        display:inline-block;
-        margin: 0 auto;
-        max-width: 320px;
-        margin-left: 80px;
-      }
+  .NewActivity {
+    background-color: #e6e6e6;
+    padding: 60px 0;
   }
+
+  .NewActivity form {
+    margin: 0 auto;
+    max-width: 320px;
+  }
+}

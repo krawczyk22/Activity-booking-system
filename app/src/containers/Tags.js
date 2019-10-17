@@ -1,5 +1,6 @@
 import React from "react";
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
+import reqwest from "reqwest";
 
 const columns = [
   {
@@ -55,32 +56,30 @@ const columns = [
 class TagsTable extends React.Component {
   state = {
     data: [],
+    selectedRowKeys: [],
     pagination: {},
     loading: false,
   };
 
-  componentDidMount(){
-      fetch("http://localhost:3000/api/v1.0/activities/getactivities/1")
-      .then(res => res.json())
-      .then(
-          (result) => {
-              console.log(result)
-              this.setState({
-                  isLoaded: true,
-                  items: result
-                });
-            },
-            // Note: it's important to handle errors here
-            // instead of a catch() block so that we don't swallow
-            // exceptions from actual bugs in components.
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
-            }
-            )
-        }
+  start = () => {
+    this.setState({ loading: true });
+    // ajax request after empty completing
+    setTimeout(() => {
+      this.setState({
+        selectedRowKeys: [],
+        loading: false,
+      });
+    }, 1000);
+  };
+
+  onSelectChange = selectedRowKeys => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    this.setState({ selectedRowKeys });
+  };
+
+  componentDidMount() {
+    this.fetch();
+  }
 
   handleTableChange = (pagination, filters, sorter) => {
     const pager = { ...this.state.pagination };
@@ -97,17 +96,59 @@ class TagsTable extends React.Component {
     });
   };
 
+  fetch = (params = {}) => {
+    console.log('params:', params);
+    this.setState({ loading: true });
+    reqwest({
+      url: 'http://localhost:3000/api/v1.0/activities/getall/',
+      method: 'get',
+      data: {
+        //RowDataPacket: 10,
+        ...params,
+      },
+      type: 'json',
+    }).then(data => {
+      const pagination = { ...this.state.pagination };
+      // Read total count from server
+      pagination.total = data.totalCount;
+      this.setState({
+        loading: false,
+        data: data,
+        pagination,
+      });
+    
+    });
+    
+  };
+
   render() {
+    const { loading, selectedRowKeys } = this.state;
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+    };
+    const hasSelected = selectedRowKeys.length > 0;
+
     return (
-      <Table
-        columns={columns}
-        //rowKey={record => record.login.uuid}
-        dataSource={this.state.data}
-        pagination={this.state.pagination}
-        loading={this.state.loading}
-        onChange={this.componentDidMount}
-        
-      />
+      <div>
+        <div style={{ marginBottom: 16 }}>
+          <Button type="primary" onClick={this.start} disabled={!hasSelected} loading={loading}>
+            Accept
+          </Button>
+          <span style={{ marginLeft: 8 }}>
+            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+          </span>
+        </div>
+        <Table
+          rowSelection={rowSelection}
+          columns={columns}
+          //rowKey={record => record.login.uuid}
+          dataSource={this.state.data}
+          pagination={this.state.pagination}
+          loading={this.state.loading}
+          onChange={this.componentDidMount}
+        />
+      </div>
     );
   }
 }
