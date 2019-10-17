@@ -124,7 +124,8 @@ exports.loginCheck = async (user) => {
                 if(data[0].password.length === 0)
                     throw {message:'username not found', status:400};
                 else {    
-                    //conduct hashing to chack if the password hash matches the password hash provided by the yser
+                    //conduct hashing to chack if the password hash matches 
+                    //the password hash provided by the user
                     var hashFromUser = bcrypt.hashSync(user.password, data[0].salt);
                     if(data[0].password == hashFromUser)
                     {

@@ -70,6 +70,32 @@ exports.addActivity = async (activity) => {
     }
 }
 
+exports.getAllActivity = async (id) => {
+    try {
+
+        //first connect to the database
+        const connection = await mysql.createConnection(info.config);
+
+        //this is the sql statement to execute
+        let sql = `SELECT * FROM activity`;
+        //wait for the async code to finish
+        let data = await connection.query(sql);
+        //wait until connection to db is closed
+        await connection.end();
+        //return the result
+        var string = JSON.stringify(data);
+        var json =  JSON.parse(string);
+        console.log(json);
+        return json;
+
+    } catch (error) {
+        //if an error occured please log it and throw an exception
+        console.log(error);
+        ctx.throw(500, 'An Error has occured');
+    }
+}
+
+
 //getting an activity by its ID
 exports.getActivityById = async (id) => {
     try {

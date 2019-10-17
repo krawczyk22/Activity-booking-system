@@ -14,6 +14,12 @@ router.get('/get/:id([0-9]{1,})', async (cnx, next) =>{
    cnx.body = await model.getActivityById(id);
 });
 
+//getting all the activities
+router.get('/getall/', async (cnx, next) =>{
+    let id = cnx.params.id;
+    cnx.body = await model.getAllActivity(id);
+ });
+
 //getting all the activities by their ids
 router.get('/getactivities/:id([0-9]{1,})', async (cnx, next) =>{
     let id = cnx.params.id;
