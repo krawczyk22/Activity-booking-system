@@ -19,6 +19,12 @@ router.get('/getactivities/:id([0-9]{1,})', async (cnx, next) =>{
     cnx.body = await model.getActivityByUser(id);
  });
 
+ //get all activities a user is tagged in
+ router.get('/getactivitiestagged/:id([0-9]{1,})', async (cnx, next) =>{
+    let id = cnx.params.id;
+    cnx.body = await model.getActivityByUserTagged(id);
+ });
+
 //inserting activities along with their description
 router.post('/insert/', bodyParser(), async (cnx, next) =>{
     

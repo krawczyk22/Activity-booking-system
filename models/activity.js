@@ -73,6 +73,33 @@ exports.getActivityByUser = async (id) => {
     }
 }
 
+//get all activities a user is tagged in
+exports.getActivityByUserTagged = async (id) => {
+    try {
+
+        //first connect to the database
+        const connection = await mysql.createConnection(info.config);
+
+        //this is the sql statement to execute
+        let sql = `SELECT * FROM ((users INNER JOIN calendar ON users.ID = calendar.userid) INNER JOIN activity ON calendar.activityit = activity.ID)
+                         INNER JOIN taggedusers ON calendar.userid = taggedusers.taggeduserid
+            WHERE taggedusers.taggeduserid = ?
+            `;
+        //wait for the async code to finish
+        let data = await connection.query(sql, id);
+
+        //wait until connection to db is closed
+        await connection.end();
+        //return the result
+        return data;
+
+    } catch (error) {
+        //if an error occured please log it and throw an exception
+        console.log(error);
+        ctx.throw(500, 'An Error has occured');
+    }
+}
+
 //deleting an activity
 exports.deleteActivity = async (activity) => {
     try {
