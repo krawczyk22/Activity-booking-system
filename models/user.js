@@ -95,7 +95,48 @@ exports.addUser = async (user) => {
 }
 
 //checking the login and password
-exports.loginCheck = async (user) => {
+exports.findOne = async (authData, callback) => {
+    try {
+        //require username
+        if(authData.username === undefined){
+            throw {message:'username is required', status:400}; 
+        }
+        //require password
+        if(authData.password === undefined){
+            throw {message:'password is required', status:400}; 
+        }
+        //opening the connection
+        const connection = await mysql.createConnection(info.config);
+    
+        //this is the sql statement to execute
+        let sql = `SELECT * FROM users WHERE username = \'${authData.username}\'`;
+
+        //executing the statement, closing the connection
+        let data = await connection.query(sql);
+        console.log(data)
+        await connection.end();
+
+        //check if there is any value from the SQL statement
+        if(data.length > 0)
+        {
+            let pass = bcrypt.compareSync(authData.password, data[0].password);
+            if(pass){
+                callback(null, data[0]);    
+            }    
+            else{
+                callback(null, false);
+            }
+        } else {
+            callback(null, false);
+        }
+    } catch(error){
+        if(error.status === undefined) error.status = 500;
+        callback(error);
+    }   
+};
+/*
+//checking the login and password
+exports.findOne = async (user, callback) => {
     try {
         //require username
         if(user.username === undefined){
@@ -131,10 +172,12 @@ exports.loginCheck = async (user) => {
                     {
                         //finish the execution if the password hashes match
                         return data;
+                        callback(null, data[0]);
                     }
                     else 
                     {
                         //notify that the password is not correct
+                        callback(null, false);
                         throw {message:'password is wrong', status:400};
                     }
                 }
@@ -142,6 +185,7 @@ exports.loginCheck = async (user) => {
             else
             {
                 //notify that the user has not been found
+                callback(null, false);
                 throw {message:'username not found', status:400};
             }
         }
@@ -149,6 +193,7 @@ exports.loginCheck = async (user) => {
         //catch any errors that occur while executing the code
         if(error.status === undefined)
             error.status = 500;
+        callback(null, false);
         throw error;
     }
-}
+}*/
