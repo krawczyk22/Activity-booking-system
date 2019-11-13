@@ -61,6 +61,11 @@ class ActivitiesTable extends React.Component {
         reqwest({
           url: 'http://localhost:3000/api/v1.0/activities/getall/',
           method: 'get',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json', 
+            //'Authorization' : 'Basic ' + window.btoa(username + ':' + password)
+          },
           data: {
             //RowDataPacket: 10,
             ...params,

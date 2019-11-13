@@ -61,7 +61,18 @@ class TagsTable extends React.Component {
     loading: false,
   };
 
-  start = () => {
+  startAccept = () => {
+    this.setState({ loading: true });
+    // ajax request after empty completing
+    setTimeout(() => {
+      this.setState({
+        selectedRowKeys: [],
+        loading: false,
+      });
+    }, 1000);
+  };
+
+  startReject = () => {
     this.setState({ loading: true });
     // ajax request after empty completing
     setTimeout(() => {
@@ -102,6 +113,11 @@ class TagsTable extends React.Component {
     reqwest({
       url: 'http://localhost:3000/api/v1.0/activities/getall/',
       method: 'get',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json', 
+        //'Authorization' : 'Basic ' + window.btoa(username + ':' + password)
+      },
       data: {
         //RowDataPacket: 10,
         ...params,
@@ -132,8 +148,12 @@ class TagsTable extends React.Component {
     return (
       <div>
         <div style={{ marginBottom: 16 }}>
-          <Button type="primary" onClick={this.start} disabled={!hasSelected} loading={loading}>
+          <Button type="primary" onClick={this.startAccept} disabled={!hasSelected} loading={loading}>
             Accept
+          </Button>
+          <span style={{ marginLeft: 8 }}></span>
+          <Button type="primary" onClick={this.startReject} disabled={!hasSelected} loading={loading}>
+            Reject
           </Button>
           <span style={{ marginLeft: 8 }}>
             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
@@ -142,11 +162,11 @@ class TagsTable extends React.Component {
         <Table
           rowSelection={rowSelection}
           columns={columns}
-          //rowKey={record => record.login.uuid}
+          rowKey={record => record.ID}
           dataSource={this.state.data}
           pagination={this.state.pagination}
           loading={this.state.loading}
-          onChange={this.componentDidMount}
+          onChange={this.handleTableChange}
         />
       </div>
     );

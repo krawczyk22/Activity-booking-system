@@ -9,7 +9,6 @@ class RegistrationForm extends React.Component {
     showSuccess: false, //if should we show a successful feedback message after adding a user
     showError: false, //if should we show an error feedback message after adding a
     errorCode: 400, //to save the errorCode we recieved from the api server
-    responseStatus: "nothing", //the validation status of the email
     errorMessage: "" //the error message to display to the user after server rejects action
     };
 
@@ -26,6 +25,7 @@ class RegistrationForm extends React.Component {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json', 
+            //'Authorization' : 'Basic ' + window.btoa(username + ':' + password)
           },
           body: JSON.stringify({values}) 
         }).then(res => {

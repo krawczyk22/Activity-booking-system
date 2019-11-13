@@ -12,17 +12,23 @@ function App(props) {
       <Navbar fluid collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <Link to="/">Calendar and booking system</Link>
+            <Link to="/welcomePage">Calendar and booking system</Link>
           </Navbar.Brand>
           <Navbar.Toggle />
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav pullRight>
-            <LinkContainer to="/login">
-              <NavItem>Login</NavItem>
+            <LinkContainer to="/activities">
+              <NavItem>Add Activities</NavItem>
             </LinkContainer>
-            <LinkContainer to="/signup">
-              <NavItem>Signup</NavItem>
+            <LinkContainer to="/activitiesView">
+              <NavItem>View Activities</NavItem>
+            </LinkContainer>
+            <LinkContainer to="/tags">
+              <NavItem>Tags</NavItem>
+            </LinkContainer>
+            <LinkContainer to="/goodbyePage">
+              <NavItem onClick={() => { localStorage.clear(); this.props.history.push('/') }}>Log out</NavItem>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>

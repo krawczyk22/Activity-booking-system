@@ -5,11 +5,10 @@ import { Form, Input, Alert, Button, Upload, message, Icon } from "antd";
 class ActivityForm extends React.Component {
   state = {
     confirmDirty: false,
-    addedSucessfully: false, //if the user is added successfully
-    showSuccess: false, //if should we show a successful feedback message after adding a user
+    addedSucessfully: false, //if the activity is added successfully
+    showSuccess: false, //if should we show a successful feedback message after adding an activity
     showError: false, //if should we show an error feedback message after adding a
     errorCode: 400, //to save the errorCode we recieved from the api server
-    responseStatus: "nothing", //the validation status of the email
     errorMessage: "" //the error message to display to the user after server rejects action
     };
 
@@ -26,6 +25,7 @@ class ActivityForm extends React.Component {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json', 
+            //'Authorization' : 'Basic ' + window.btoa(username + ':' + password)
           },
           body: JSON.stringify({values}) 
         }).then(res => {
@@ -92,7 +92,7 @@ class ActivityForm extends React.Component {
       };
       const props = {
         name: 'file',
-        action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76', 
+        action: 'shallBeReplaced', 
         headers: {
           authorization: 'authorization-text',
         },
