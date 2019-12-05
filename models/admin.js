@@ -12,7 +12,6 @@ exports.createTables = async (id)=> {
             ID INT NOT NULL AUTO_INCREMENT,
             username TEXT,
             password TEXT,
-            salt TEXT,
             PRIMARY KEY (ID)
             )`;
         await connection.query(sql);

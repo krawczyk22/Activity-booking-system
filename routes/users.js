@@ -75,28 +75,5 @@ router.post('/login/', async (cnx, next) =>{
       else cnx.body = { message: 'Logged in successfully'};
    })(cnx);
 });
-/*
 
-//note that we have injected the body parser only in the POST request
-router.post('/login/', bodyParser(), async (cnx, next) =>{
-
-   console.log(cnx.request.body);
-   //creating a variable that holds the information provided by the user
-   let newUser = {
-      username:cnx.request.body.values.username, 
-      password:cnx.request.body.values.password
-   };
-   try {
-      //calling the function and passing the data to it
-      await model.findOne(newUser);
-      cnx.response.status = 201;
-      //if successful, the message is passed to the frontend
-      cnx.body = {message:"user was logged in"};
-   } catch(error) {
-      //if not successful, the message is passed to the frontend
-      cnx.response.status = error.status;
-      cnx.body = {message:error.message};
-   }
-});
-*/
 module.exports = router;
