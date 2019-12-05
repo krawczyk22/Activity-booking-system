@@ -7,49 +7,43 @@ const columns = [
     title: 'Title',
     dataIndex: 'title',
     sorter: true,
-    width: '12.5%',
+    width: '14%',
   },
   {
     title: 'Description',
     dataIndex: 'description',
     sorter: true,
-    width: '12.5%',
+    width: '14%',
   },
   {
     title: 'URL',
     dataIndex: 'url',
     sorter: true,
-    width: '12.5%',
+    width: '14%',
   },
   {
     title: 'Location',
     dataIndex: 'location',
     sorter: true,
-    width: '12.5%',
+    width: '14%',
   },
   {
     title: 'From',
     dataIndex: 'fromdate',
     sorter: true,
-    width: '12.5%',
+    width: '15%',
   },
   {
     title: 'To',
     dataIndex: 'todate',
     sorter: true,
-    width: '12.5%',
-  },
-  {
-    title: 'Tagged by',
-    dataIndex: 'username',
-    sorter: true,
-    width: '12.5%',
+    width: '15%',
   },
   {
     title: 'Accepted',
     dataIndex: 'accepted',
     sorter: true,
-    width: '12.5%',
+    width: '14%',
   },
 ];
 
@@ -111,12 +105,11 @@ class TagsTable extends React.Component {
     console.log('params:', params);
     this.setState({ loading: true });
     reqwest({
-      url: 'http://localhost:3000/api/v1.0/activities/getall/',
-      method: 'get',
+      url: 'http://localhost:3000/api/v1.0/activities/getactivitiestagged/' + localStorage.getItem('username'),
+      method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json', 
-        //'Authorization' : 'Basic ' + window.btoa(username + ':' + password)
+        'Content-Type': 'application/json'
       },
       data: {
         //RowDataPacket: 10,

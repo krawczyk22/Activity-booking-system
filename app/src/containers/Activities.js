@@ -24,8 +24,8 @@ class ActivityForm extends React.Component {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json', 
-            //'Authorization' : 'Basic ' + window.btoa(username + ':' + password)
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + window.btoa(localStorage.getItem('username') + ':' + localStorage.getItem('password'))
           },
           body: JSON.stringify({values}) 
         }).then(res => {
@@ -92,7 +92,7 @@ class ActivityForm extends React.Component {
       };
       const props = {
         name: 'file',
-        action: 'shallBeReplaced', 
+        action: 'shallBeReplacedWithTheLinkToTheBackendFileUpload', //link to the backend
         headers: {
           authorization: 'authorization-text',
         },
@@ -148,15 +148,7 @@ class ActivityForm extends React.Component {
             ],
           })(<Input onChange={this.handleThing} />)}
           </Form.Item>
-          <Form.Item label="Tag user" hasFeedback>
-          {getFieldDecorator('taggeduserid', { 
-            rules: [
-              {
-              required: false,
-              message: 'Please input the location!', },
-            ],
-          })(<Input onChange={this.handleThing} />)}
-          </Form.Item>
+          
           <Form.Item {...tailFormItemLayout}>
             <Upload {...props}>
             <Button>

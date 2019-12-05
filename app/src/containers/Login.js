@@ -34,7 +34,6 @@ class LoginForm extends React.Component {
             localStorage.setItem('password', values.password)
             this.setState({ addedSucessfully: true })
             this.props.history.push('/welcomePage')
-            //window.location.reload();
           }
           else
             this.setState({

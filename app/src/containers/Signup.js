@@ -24,8 +24,7 @@ class RegistrationForm extends React.Component {
           method: 'POST',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json', 
-            //'Authorization' : 'Basic ' + window.btoa(username + ':' + password)
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({values}) 
         }).then(res => {
