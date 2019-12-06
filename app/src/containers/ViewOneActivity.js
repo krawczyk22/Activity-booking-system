@@ -37,14 +37,25 @@ export class ViewOneActivity extends Component {
             <div>
                 <div>
                     <div>
-                        <h1>Calendar Booking System</h1>
-                        <h1>View activity {this.state.id}</h1>
-                        <div className="activityView">
-                            <br/><br/>
-                            <h3 className ="title"> Title: {this.state.activity.title}</h3>
-                            <h3 className ="title">Description: {this.state.activity.description}</h3> 
-                            <h3 className ="title">URL: {this.state.activity.url} </h3>
-                            <h3 className ="title">Location: {this.state.activity.location}</h3>
+                        <div>
+                            <table>
+                                <tr>
+                                    <td><h3>Title: </h3></td>
+                                    <td>   {this.state.activity.title}</td>
+                                </tr>
+                                <tr>
+                                    <td><h3>Description: </h3></td>
+                                    <td>   {this.state.activity.description}</td>
+                                </tr>
+                                <tr>
+                                    <td><h3>URL: </h3></td>
+                                    <td>   {this.state.activity.url}</td>
+                                </tr>
+                                <tr>
+                                    <td><h3>Location: </h3></td>
+                                    <td>   {this.state.activity.location}</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
