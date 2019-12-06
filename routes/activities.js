@@ -32,6 +32,15 @@ router.get('/getactivities/:id([0-9]{1,})', async (cnx, next) =>{
     cnx.body = await model.getActivityByUserTagged(id);
  });
 
+  //get all activities within a Date Range
+  router.get('/getactivitiesDateRange/:fromdate&:todate', async (cnx, next) =>{
+    let fromdate = cnx.params.fromdate;
+    let todate = cnx.params.todate;
+    console.log(fromdate)
+    console.log(todate)
+    cnx.body = await model.getActivityDateRange(fromdate, todate);
+ });
+
 //inserting activities along with their description
 router.post('/insert/', bodyParser(), async (cnx, next) =>{
     
