@@ -148,6 +148,15 @@ class ActivityForm extends React.Component {
             ],
           })(<Input onChange={this.handleThing} />)}
           </Form.Item>
+          <Form.Item label="Tag user" hasFeedback>
+          {getFieldDecorator('taggeduserid', { 
+            rules: [
+              {
+              required: true,
+              message: 'Please input the username!', },
+            ],
+          })(<Input onChange={this.handleThing} />)}
+          </Form.Item>
           
           <Form.Item {...tailFormItemLayout}>
             <Upload {...props}>
