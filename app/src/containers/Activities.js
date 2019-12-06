@@ -152,7 +152,6 @@ class ActivityForm extends React.Component {
           {getFieldDecorator('taggeduserid', { 
             rules: [
               {
-              required: true,
               message: 'Please input the username!', },
             ],
           })(<Input onChange={this.handleThing} />)}

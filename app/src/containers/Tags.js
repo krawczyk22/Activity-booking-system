@@ -55,31 +55,86 @@ class TagsTable extends React.Component {
     loading: false,
   };
 
-  startAccept = () => {
-    this.setState({ loading: true });
-    // ajax request after empty completing
-    setTimeout(() => {
-      this.setState({
-        selectedRowKeys: [],
-        loading: false,
-      });
-    }, 1000);
+  startAccept = e => {
+    e.preventDefault();
+    //this.props.form.validateFieldsAndScroll((err, values) => {
+      //if (!err) {
+        //echo the values to the browser console to make sure they are correct
+        //console.log('Received values of form: ', values);
+        //here we should send a request to our server to post the user
+        //use fetch API to post the user data
+        fetch('http://localhost:3000/api/v1.0/tags/put/' + localStorage.getItem('key'), { 
+          method: 'PUT',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: {"accepted":true}
+        }).then(res => {
+          if(res.ok) 
+            this.setState({addedSucessfully:true})
+          else 
+            this.setState({
+              addedSucessfully:false,
+              errorCode: res.status
+            });
+          return res.json()
+        }).then(data => this.checkResponse(data))
+     // } 
+   // });
   };
 
-  startReject = () => {
-    this.setState({ loading: true });
-    // ajax request after empty completing
-    setTimeout(() => {
-      this.setState({
-        selectedRowKeys: [],
-        loading: false,
-      });
-    }, 1000);
+  startReject = e => {
+    e.preventDefault();
+    //this.props.form.validateFieldsAndScroll((err, values) => {
+      //if (!err) {
+        //echo the values to the browser console to make sure they are correct
+        //console.log('Received values of form: ', values);
+        //here we should send a request to our server to post the user
+        //use fetch API to post the user data
+        fetch('http://localhost:3000/api/v1.0/tags/put/' + localStorage.getItem('key'), { 
+          method: 'PUT',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: {"accepted":false}
+        }).then(res => {
+          if(res.ok) 
+            this.setState({addedSucessfully:true})
+          else 
+            this.setState({
+              addedSucessfully:false,
+              errorCode: res.status
+            });
+          return res.json()
+        }).then(data => this.checkResponse(data))
+      //} 
+    //});
   };
 
   onSelectChange = selectedRowKeys => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
+    localStorage.setItem('key', selectedRowKeys)
     this.setState({ selectedRowKeys });
+  };
+
+  checkResponse = (data) => {
+    if (this.state.addedSucessfully) {
+      this.setState({
+        showSuccess: true,
+        showError: false
+      });
+      window.location.reload();
+    } else {
+      //handle errors
+      this.setState({
+        errorMessage: data.message,
+        showSuccess: false,
+        showError: true,
+        responseStatus: "error"
+      });
+    }
   };
 
   componentDidMount() {
