@@ -7,10 +7,6 @@ exports.addActivity = async (activity) => {
         
         //establishing the connection
         const connection = await mysql.createConnection(info.config);
-
-        //if tagged user is not suplied then the TaggedUser table is not altered
-        if(activity.taggeduserid === undefined)
-        {
             //creating the SQL statement along with the variable that contains the information
             let sql = `INSERT INTO activity SET ?`;
             let newActivity = {
@@ -20,48 +16,11 @@ exports.addActivity = async (activity) => {
                 location:activity.location
             }
             
-            //executinh the statement, closing the connection and returning the data
+            //executing the statement, closing the connection and returning the data
             let data1 = await connection.query(sql, newActivity);
             await connection.end();
             return data1;
-        }
-        else
-        {
-            //this is the sql statement to execute if the tagged user is supplied
-            let sqlUserCheck = `SELECT ID FROM users WHERE username = \'${activity.taggeduserid}\'`;
-            let check = await connection.query(sqlUserCheck);
-
-            //checking if the user exists in the database by checking the length of the check result
-            if(check.length == 0){ 
-                throw {message:'Tagged user does not exist', status:400};
-                //closing the connection
-                await connection.end();
-            }
-            else{
-                //if the user exists in the system the SQL statements to alter 2 tables are created
-                let sql = `INSERT INTO activity SET ?`;
-                let sql2 = `INSERT INTO taggedusers SET ?`;
-
-                //creating variables with the information to bysupplied to the database
-                let newActivity = {
-                    title:activity.title,
-                    description:activity.description, 
-                    url:activity.url, 
-                    location:activity.location
-                }
-
-                let newActivity2 = {
-                    taggeduserid:check[0].ID,
-                    accepted:false
-                }
-
-                //executing the statements, closing the connection and returning the data
-                let data2 = await connection.query(sql, newActivity);
-                await connection.query(sql2, newActivity2);
-                await connection.end();
-                return data2;
-            }
-        }
+            
     //catching the errors if they exist
     } catch (error) {
         if(error.status === undefined)
@@ -156,9 +115,13 @@ exports.getActivityByUserTagged = async (id) => {
         const connection = await mysql.createConnection(info.config);
 
         //this is the sql statement to execute
-        let sql = `SELECT * FROM ((users INNER JOIN calendar ON users.ID = calendar.userid) INNER JOIN activity ON calendar.activityit = activity.ID)
-                         INNER JOIN taggedusers ON calendar.userid = taggedusers.taggeduserid
-            WHERE taggedusers.taggeduserid = ?
+        let sql = `SELECT taggedusers.id AS id, activity.title AS title, activity.description AS description, 
+                        activity.url AS url, activity.location AS location, calendar.fromdate AS fromdate, 
+                        calendar.todate AS todate, taggedusers.accepted AS accepted 
+                        FROM ((users INNER JOIN calendar ON users.ID = calendar.userid) 
+                        INNER JOIN activity ON calendar.activityit = activity.ID)
+                        INNER JOIN taggedusers ON calendar.userid = taggedusers.taggeduserid
+                        WHERE users.username = ?
             `;
         //wait for the async code to finish
         let data = await connection.query(sql, id);

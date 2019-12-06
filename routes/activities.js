@@ -1,5 +1,6 @@
 var Router = require('koa-router');
 var model = require('../models/activity.js');
+var passport = require('koa-passport');
 
 var router = Router({
    prefix: '/api/v1.0/activities'
@@ -27,7 +28,7 @@ router.get('/getactivities/:id([0-9]{1,})', async (cnx, next) =>{
  });
 
  //get all activities a user is tagged in
- router.get('/getactivitiestagged/:id([0-9]{1,})', async (cnx, next) =>{
+ router.get('/getactivitiestagged/:id', async (cnx, next) =>{
     let id = cnx.params.id;
     cnx.body = await model.getActivityByUserTagged(id);
  });
@@ -43,28 +44,28 @@ router.get('/getactivities/:id([0-9]{1,})', async (cnx, next) =>{
 
 //inserting activities along with their description
 router.post('/insert/', bodyParser(), async (cnx, next) =>{
-    
-    console.log(cnx.request.body);
+    //authentication of the user
+    return passport.authenticate('basic', async function(err, user, info, status) {
+        if(err){
+           cnx.body = err
+        }
+        else if (user === false) {
+           cnx.body = { success: false }
+           cnx.throw(401)
+        } else {
+            let newActivity = {
+                title:cnx.request.body.values.title, 
+                description:cnx.request.body.values.description, 
+                url:cnx.request.body.values.url, 
+                location:cnx.request.body.values.location,
+            };
 
-    //creating a variable that holds the information provided by the user
-    let newActivity = {
-        title:cnx.request.body.values.title, 
-        description:cnx.request.body.values.description, 
-        url:cnx.request.body.values.url, 
-        location:cnx.request.body.values.location,
-        taggeduserid:cnx.request.body.values.taggeduserid
-    };
-    try {
-        //calling the function and passing the data to it
-        await model.addActivity(newActivity);
-        cnx.response.status = 201;
-        //if successful, the message is passed to the frontend
-        cnx.body = {message:"user was added successfully"};
-    } catch(error) {
-        //if not successful then the error message is passed to the frontend
-        cnx.response.status = error.status;
-        cnx.body = {message:error.message};
-     }
+            //calling the function and passing the data to it
+            await model.addActivity(newActivity);
+            //if successful, the message is passed to the frontend
+            cnx.body = {message:"user was added successfully"};
+        }
+     })(cnx)
 });
 
 //deleting activities by their ids
@@ -79,18 +80,29 @@ router.delete('/delete/:id([0-9]{1,})', async (cnx, next) =>{
 
 //updating activities by their ids
 router.put('/put/:id([0-9]{1,})', bodyParser(), async (cnx, next) =>{
-    //creating a variable that holds the information provided by the user
-    let id = cnx.params.id;
-    let updateActivity = {
-        title:cnx.request.body.title, 
-        description:cnx.request.body.description, 
-        url:cnx.request.body.url, 
-        location:cnx.request.body.location
-    };
-    //calling the function and passing the data to it
-    await model.updateActivity(id, updateActivity);
-    //if successful, the message is passed to the frontend
-    cnx.body = {message:"updated successfully"};
+    //authentication of the user
+    return passport.authenticate('basic', async function(err, user, info, status) {
+        if(err){
+           cnx.body = err
+        }
+        else if (user === false) {
+           cnx.body = { success: false }
+           cnx.throw(401)
+        } else {
+            //creating a variable that holds the information provided by the user
+            let id = cnx.params.id;
+            let updateActivity = {
+                title:cnx.request.body.title, 
+                description:cnx.request.body.description, 
+                url:cnx.request.body.url, 
+                location:cnx.request.body.location
+            };
+            //calling the function and passing the data to it
+            await model.updateActivity(id, updateActivity);
+            //if successful, the message is passed to the frontend
+            cnx.body = {message:"updated successfully"};
+        }
+     })(cnx)
 });
 
 module.exports = router;

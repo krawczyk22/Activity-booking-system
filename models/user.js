@@ -19,7 +19,7 @@ exports.getById = async (id) => {
         await connection.end();
 
         //return the result
-        return data;
+        return data[0].ID;
     } catch (error) {
         //if an error occured please log it and throw an exception
         throw new Error(error) 
@@ -77,8 +77,7 @@ exports.addUser = async (user) => {
         //create a new object to hold users final data
         let userData = {
             username: user.username,
-            password: hash,
-            salt: salt
+            password: hash
         }
         //this is the sql statement to execute
         sql = `INSERT INTO users SET ? `;
@@ -95,60 +94,43 @@ exports.addUser = async (user) => {
 }
 
 //checking the login and password
-exports.loginCheck = async (user) => {
+exports.findOne = async (authData, callback) => {
     try {
         //require username
-        if(user.username === undefined){
+        if(authData.username === undefined){
             throw {message:'username is required', status:400}; 
         }
         //require password
-        if(user.password === undefined){
+        if(authData.password === undefined){
             throw {message:'password is required', status:400}; 
         }
-        else {
-            //opening the connection
-            const connection = await mysql.createConnection(info.config);
-        
-            //this is the sql statement to execute
-            let sql = `SELECT password, salt FROM users WHERE 
-                username = \'${user.username}\'`;
+        //opening the connection
+        const connection = await mysql.createConnection(info.config);
+    
+        //this is the sql statement to execute
+        let sql = `SELECT * FROM users WHERE username = \'${authData.username}\'`;
 
-            //executing the statement, closing the connection
-            let data = await connection.query(sql);
-            await connection.end();
+        //executing the statement, closing the connection
+        let data = await connection.query(sql);
+        console.log(data)
+        await connection.end();
 
-            //check if there is any value from the SQL statement
-            if(data.length)
-            {
-                //if the password length is 0 then the user has not been found
-                if(data[0].password.length === 0)
-                    throw {message:'username not found', status:400};
-                else {    
-                    //conduct hashing to chack if the password hash matches 
-                    //the password hash provided by the user
-                    var hashFromUser = bcrypt.hashSync(user.password, data[0].salt);
-                    if(data[0].password == hashFromUser)
-                    {
-                        //finish the execution if the password hashes match
-                        return data;
-                    }
-                    else 
-                    {
-                        //notify that the password is not correct
-                        throw {message:'password is wrong', status:400};
-                    }
-                }
+        //check if there is any value from the SQL statement
+        if(data.length > 0)
+        {
+            let pass = bcrypt.compareSync(authData.password, data[0].password);
+            if(pass){
+                console.log(data[0])
+                callback(null, data[0]);    
+            }    
+            else{
+                callback(null, false);
             }
-            else
-            {
-                //notify that the user has not been found
-                throw {message:'username not found', status:400};
-            }
+        } else {
+            callback(null, false);
         }
-    } catch (error) {
-        //catch any errors that occur while executing the code
-        if(error.status === undefined)
-            error.status = 500;
-        throw error;
-    }
-}
+    } catch(error){
+        if(error.status === undefined) error.status = 500;
+        callback(error);
+    }   
+};
