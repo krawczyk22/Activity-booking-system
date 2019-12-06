@@ -23,7 +23,7 @@ export default function Routes() {
       <Route path="/activitiesView" exact component={ActivitiesView} />
       <Route path="/tags" exact component={Tags} />
       <Route path="/NotFound" exact component={NotFound} />
-      <Route path="Calendar" exact component={Calendar} />
+      <Route path="/Calendar" exact component={Calendar} />
       { /* Finally, catch all unmatched routes */ }
       <Route component={NotFound} />
     </Switch>
