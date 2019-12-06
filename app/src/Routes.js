@@ -9,7 +9,7 @@ import Activities from "./containers/Activities";
 import ActivitiesView from "./containers/ActivitiesView";
 import NotFound from "./containers/NotFound";
 import Tags from "./containers/Tags";
-
+import Calendar from "./containers/Calendar";
 
 export default function Routes() {
   return (
@@ -23,6 +23,7 @@ export default function Routes() {
       <Route path="/activitiesView" exact component={ActivitiesView} />
       <Route path="/tags" exact component={Tags} />
       <Route path="/NotFound" exact component={NotFound} />
+      <Route path="Calendar" exact component={Calendar} />
       { /* Finally, catch all unmatched routes */ }
       <Route component={NotFound} />
     </Switch>
