@@ -49,6 +49,7 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
                 description:cnx.request.body.values.description, 
                 url:cnx.request.body.values.url, 
                 location:cnx.request.body.values.location,
+                taggeduserid:cnx.request.body.values.taggeduserid
             };
 
             //calling the function and passing the data to it

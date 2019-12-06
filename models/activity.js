@@ -8,18 +8,52 @@ exports.addActivity = async (activity) => {
         //establishing the connection
         const connection = await mysql.createConnection(info.config);
             //creating the SQL statement along with the variable that contains the information
-            let sql = `INSERT INTO activity SET ?`;
-            let newActivity = {
-                title:activity.title,
-                description:activity.description, 
-                url:activity.url, 
-                location:activity.location
-            }
-            
-            //executing the statement, closing the connection and returning the data
-            let data1 = await connection.query(sql, newActivity);
-            await connection.end();
-            return data1;
+            if(activity.taggeduserid === undefined)
+	        {
+	            let sql = `INSERT INTO activity SET ?`;
+	            let newActivity = {
+	                title:activity.title,
+	                description:activity.description, 
+	                url:activity.url, 
+	                location:activity.location
+	            }
+	                let data1 = await connection.query(sql, newActivity);
+	                await connection.end();
+	                return data1;
+	        }
+	        else
+	        {
+	            //this is the sql statement to execute
+	            let sqlUserCheck = `SELECT ID FROM users WHERE username = \'${activity.taggeduserid}\'`;
+	            let check = await connection.query(sqlUserCheck);
+	
+	            if(check.length == 0){ 
+	                throw {message:'Tagged user does not exist', status:400};
+	                await connection.end();
+	            }
+	            else{
+	
+	                let sql = `INSERT INTO activity SET ?`;
+	                let sql2 = `INSERT INTO taggedusers SET ?`;
+	
+	                let newActivity = {
+	                    title:activity.title,
+	                    description:activity.description, 
+	                    url:activity.url, 
+	                    location:activity.location
+	                }
+	
+	                let newActivity2 = {
+	                    taggeduserid:check[0].ID,
+	                    accepted:false
+	                }
+	
+	                let data2 = await connection.query(sql, newActivity);
+	                await connection.query(sql2, newActivity2);
+	                await connection.end();
+	                return data2;
+	            }
+	        }
             
     //catching the errors if they exist
     } catch (error) {
