@@ -63,7 +63,7 @@ exports.getCommentByid = async (id) => {
         const connection = await mysql.createConnection(info.config);
 
         //this is the sql statement to execute
-        let sql = `SELECT * FROM comments WHERE activityID = ${activityid}`;
+        let sql = `SELECT * FROM comments WHERE activityID = ${id}`;
 
         //wait for the async code to finish
         let data = await connection.query(sql, id);

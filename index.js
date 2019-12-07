@@ -1,3 +1,4 @@
+var express = require('express');
 //import koa
 var Koa = require('koa');
 const cors = require('@koa/cors');
@@ -11,6 +12,7 @@ var users = require('./routes/users.js');
 var activities = require('./routes/activities.js');
 var tags = require('./routes/tags.js');
 var comments = require('./routes/comments.js');
+var profile = require ('./routes/profile.js')
 
 //create a koa instance and store it in app variable
 var app = new Koa();
@@ -26,6 +28,9 @@ app.use(users.routes());
 app.use(activities.routes());
 app.use(tags.routes());
 app.use(comments.routes());
+
+var app = express();
+app.use('/profile', profile);
 
 
 //if there is no environment variable set for port number

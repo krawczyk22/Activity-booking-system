@@ -41,7 +41,7 @@ router.get('/get/:id([0-9]{1,})', async (cnx, next) =>{
  });
 
  //GET all comments on an Activity
- router.get('/get/:activityid', async (cnx, next) =>{
+ router.get('/getcomments/:id', async (cnx, next) =>{
     let id = cnx.params.id;
     cnx.body = await model.getAllCommentsOnActivity(id);
  });

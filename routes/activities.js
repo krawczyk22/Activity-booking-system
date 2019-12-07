@@ -105,4 +105,12 @@ router.put('/put/:id([0-9]{1,})', bodyParser(), async (cnx, next) =>{
      })(cnx)
 });
 
+ //upload file
+ router.post('/postFile', async ( cnx, next) =>{
+    const body = ctx.request.body
+		const {path, type} = ctx.request.files.avatar
+    cnx.body = await model.uploadPicture(path, type, username);
+ });
+
+
 module.exports = router;

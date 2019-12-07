@@ -206,3 +206,8 @@ exports.updateActivity = async (id, activity) => {
         ctx.throw(500, 'An Error has occured');
     }
 }
+
+exports.uploadPicture = async (path, mimeType, username) => {
+    const extension = mime.extension(mimeType)
+    await fs.copy(path, `public/question/${username}.${extension}`)
+}
