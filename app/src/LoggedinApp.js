@@ -30,6 +30,9 @@ function App(props) {
             <LinkContainer to="/Calendar">
               <NavItem>Calendar</NavItem>
             </LinkContainer>
+            <LinkContainer to="/Comments">
+              <NavItem>Comments</NavItem>
+              </LinkContainer>
             <LinkContainer to="/goodbyePage">
               <NavItem onClick={() => { localStorage.clear(); this.props.history.push('/') }}>Log out</NavItem>
             </LinkContainer>

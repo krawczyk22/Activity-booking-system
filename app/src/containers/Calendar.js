@@ -22,7 +22,7 @@ class CalendarComponent extends React.Component {
   }
 
   getDataFromServer() {
-    fetch('http://localhost:8081/api/v1.0/activities/Calendar')
+    fetch('http://localhost:3000/api/v1.0/activities/Calendar')
       .then(data => data.json())
       .then(json => {       
         this.setState({

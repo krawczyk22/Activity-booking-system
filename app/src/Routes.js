@@ -10,6 +10,7 @@ import ActivitiesView from "./containers/ActivitiesView";
 import NotFound from "./containers/NotFound";
 import Tags from "./containers/Tags";
 import Calendar from "./containers/Calendar";
+import Comments from "./containers/Comments";
 import ViewOneActivity from "./containers/ViewOneActivity";
 
 export default function Routes() {
@@ -25,6 +26,7 @@ export default function Routes() {
       <Route path="/tags" exact component={Tags} />
       <Route path="/NotFound" exact component={NotFound} />
       <Route path="/Calendar" exact component={Calendar} />
+      <Route path="/Comments" exact component={Comments} />
       <Route path="/ViewOneActivity/:id" exact component={ViewOneActivity} />
       { /* Finally, catch all unmatched routes */ }
       <Route component={NotFound} />
