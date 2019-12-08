@@ -1,5 +1,6 @@
 var Router = require('koa-router');
 var model = require('../models/activity.js');
+var userModel = require('../models/user')
 var passport = require('koa-passport');
 
 var router = Router({
@@ -21,7 +22,7 @@ router.get('/getall/', async (cnx, next) =>{
     cnx.body = await model.getAllActivity(id);
  });
 
-//getting all the activities by their ids
+//getting all the activities by user
 router.get('/getactivities/:id([0-9]{1,})', async (cnx, next) =>{
     let id = cnx.params.id;
     cnx.body = await model.getActivityByUser(id);
@@ -105,12 +106,27 @@ router.put('/put/:id([0-9]{1,})', bodyParser(), async (cnx, next) =>{
      })(cnx)
 });
 
- //upload file
- router.post('/postFile', async ( cnx, next) =>{
-    const body = ctx.request.body
-		const {path, type} = ctx.request.files.avatar
-    cnx.body = await model.uploadPicture(path, type, username);
- });
+router.post('/', bodyParser(), async(cnx,next)=>{
+    
+    let activity = {
+        title: cnx.request.body.title,
+        description: cnx.request.body.description,
+        url: cnx.request.body.url,
+        location: cnx.request.body.location
+    };
+    let addedActivity = await model.addActivity(activity);
+    let now = new Date()
+    let fromTime = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:00`
+    let toTime = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${now.getHours() + 1}:${now.getMinutes()}:00`
+    let currentUser = await userModel.getUserByUsername(cnx.request.body.currentUser)
+    await model.addActivitiesToCalendar(addedActivity.insertId, currentUser[0].Id, fromTime, toTime)
+    cnx.response.status = 201;
+    cnx.body = { message: "added successfully" };
+});
+
+router.get('/calendar', async(cnx,next)=>{
+    cnx.body=await model.getCalendar();
+});
 
 
 module.exports = router;

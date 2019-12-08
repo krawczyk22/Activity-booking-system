@@ -134,3 +134,18 @@ exports.findOne = async (authData, callback) => {
         callback(error);
     }   
 };
+
+//Getting user by username
+exports.getUserByUsername = async (username) => {
+    try {
+          const connection = await mysql.createConnection(info.config);
+          //this is the sql statement to execute   
+          let sql = `SELECT * FROM users where username = "${username}"`;
+          let data = await connection.query(sql);
+          await connection.end();
+          return data;
+    } catch (error) {
+          console.log(error);
+          throw (500, 'An Error has occured');
+    }
+}

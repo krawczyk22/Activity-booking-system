@@ -1,4 +1,4 @@
-var express = require('express');
+
 //import koa
 var Koa = require('koa');
 const cors = require('@koa/cors');
@@ -28,10 +28,11 @@ app.use(users.routes());
 app.use(activities.routes());
 app.use(tags.routes());
 app.use(comments.routes());
-
+/*
+//upload files profile
 var app = express();
 app.use('/profile', profile);
-
+*/
 
 //if there is no environment variable set for port number
 //use a default value of 3000

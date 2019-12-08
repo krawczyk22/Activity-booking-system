@@ -207,7 +207,40 @@ exports.updateActivity = async (id, activity) => {
     }
 }
 
-exports.uploadPicture = async (path, mimeType, username) => {
-    const extension = mime.extension(mimeType)
-    await fs.copy(path, `public/question/${username}.${extension}`)
+//Adding all activities to calendar
+exports.addActivitiesToCalendar = async (activityId, userId, fromTime, toTime) => {
+    try {
+        let activityLocation = await this.getActivityById(activityId)
+        activityLocation = activityLocation[0].location
+        console.log(activityLocation)
+        const connection = await mysql.createConnection(info.config);
+        let calendarItem = {
+            from: fromTime,
+            to: toTime,
+            location: activityLocation,
+            userId: userId,
+            activityId: activityId
+        }
+        let sql = `INSERT INTO calendar SET ?`;
+        let data = await connection.query(sql, calendarItem);
+        await connection.end();
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw (500, 'An Error has occured');
+    }
+}
+
+exports.getCalendar= async()=>{
+    try{
+        const connection =await mysql.createConnection(info.config);
+        let sql =`SELECT * FROM calendar`;
+        let data = await connection.query(sql);
+        await connection.end();
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw (500, 'An Error has occured');
+
+    }
 }
