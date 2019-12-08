@@ -71,17 +71,17 @@ exports.getCommentByid = async (id) => {
 }
 
  //GET all comments on an Activity
- exports.getAllCommentsOnActivity = async (id) => {
+ exports.getAllCommentsOnActivity = async (activityid) => {
     try {
 
         //first connect to the database
         const connection = await mysql.createConnection(info.config);
 
         //this is the sql statement to execute
-        let sql = `SELECT * FROM comments WHERE activityID = ${id}`;
+        let sql = `SELECT * FROM comments WHERE activityid = ${activityid}`;
 
         //wait for the async code to finish
-        let data = await connection.query(sql, id);
+        let data = await connection.query(sql, activityid);
 
         //wait until connection to db is closed
         await connection.end();
@@ -91,6 +91,6 @@ exports.getCommentByid = async (id) => {
     } catch (error) {
         //if an error occured please log it and throw an exception
         console.log(error);
-        ctx.throw(500, 'An Error has occured');
+        throw(500, 'An Error has occured');
     }
 }
