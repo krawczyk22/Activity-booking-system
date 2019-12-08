@@ -26,7 +26,7 @@ export default function Routes() {
       <Route path="/tags" exact component={Tags} />
       <Route path="/NotFound" exact component={NotFound} />
       <Route path="/Calendar" exact component={Calendar} />
-      <Route path="/Comments" exact component={Comments} />
+      <Route path="/Comments/:foractivityid" exact component={Comments} />
       <Route path="/ViewOneActivity/:id" exact component={ViewOneActivity} />
       { /* Finally, catch all unmatched routes */ }
       <Route component={NotFound} />
