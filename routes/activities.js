@@ -59,6 +59,7 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
                 description:cnx.request.body.values.description, 
                 url:cnx.request.body.values.url, 
                 location:cnx.request.body.values.location,
+                taggeduserid:cnx.request.body.values.taggeduserid
             };
 
             //calling the function and passing the data to it
@@ -93,10 +94,10 @@ router.put('/put/:id([0-9]{1,})', bodyParser(), async (cnx, next) =>{
             //creating a variable that holds the information provided by the user
             let id = cnx.params.id;
             let updateActivity = {
-                title:cnx.request.body.title, 
-                description:cnx.request.body.description, 
-                url:cnx.request.body.url, 
-                location:cnx.request.body.location
+                title:cnx.request.body.values.title, 
+                description:cnx.request.body.values.description, 
+                url:cnx.request.body.values.url, 
+                location:cnx.request.body.values.location
             };
             //calling the function and passing the data to it
             await model.updateActivity(id, updateActivity);
