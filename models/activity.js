@@ -149,7 +149,7 @@ exports.getActivityDateRange = async (fromdate, todate) => {
         let sql = `SELECT * FROM activity INNER JOIN calendar ON activity.ID = calendar.activityit WHERE calendar.fromdate = ${fromdate} AND calendar.todate = ${todate}
             `;
         //wait for the async code to finish
-        let data = await connection.query(sql, id);
+        let data = await connection.query(sql);
 
         //wait until connection to db is closed
         await connection.end();
@@ -228,6 +228,21 @@ exports.addActivitiesToCalendar = async (activityId, userId, fromTime, toTime) =
     } catch (error) {
         console.log(error);
         throw (500, 'An Error has occured');
+    }
+}
+
+exports.getActivityById = async (id) => {
+    try {
+        const connection = await mysql.createConnection(info.config);
+        let sql = `SELECT * FROM activity WHERE Id = ${id};`;
+        console.log(sql)
+        let data = await connection.query(sql);
+        await connection.end();
+        return data;
+    } catch (error) {
+        //if an error occured, please log it and throw exception
+        console.log(error)
+        throw (500, 'An error has occured')
     }
 }
 

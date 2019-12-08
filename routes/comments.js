@@ -34,6 +34,24 @@ router.post('/insertComment/', bodyParser(), async (cnx, next) =>{
      }
 });
 
+//Edit a comment
+router.put('/:id',bodyParser(), async(cnx,next)=>{
+    let updatedComment={
+        userId:cnx.request.body.userId,
+        activityId:cnx.request.body.activityId,
+        allText:cnx.request.body.allText,
+        dateCreated:cnx.request.body.dateCreated,
+        dateModified:cnx.request.body.dateModified
+    };
+    let dateCreatedFormat = new Date(updatedComment.dateCreated)
+    let dateModifiedFormat = new Date(updatedComment.dateModified)
+    updatedComment.dateCreated = `${dateCreatedFormat.getFullYear()}-${dateCreatedFormat.getMonth() + 1}-${dateCreatedFormat.getDate()} ${dateCreatedFormat.getHours()}:${dateCreatedFormat.getMinutes()}:00`
+    updatedComment.dateModified = `${dateModifiedFormat.getFullYear()}-${dateModifiedFormat.getMonth() + 1}-${dateModifiedFormat.getDate()} ${dateModifiedFormat.getHours()}:${dateModifiedFormat.getMinutes()}:00`
+    await model.updateComment(cnx.params.id,updatedComment);
+    cnx.response.status = 200;
+    cnx.body={message:"updated successfully"};
+});
+
 //GET a comment by its id
 router.get('/get/:id([0-9]{1,})', async (cnx, next) =>{
     let id = cnx.params.id;

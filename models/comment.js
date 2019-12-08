@@ -30,6 +30,21 @@ exports.addComment = async (comment) => {
     }
 }
 
+//Edit comment
+exports.updateComment = async (id, updatedComment) => {
+    try {
+        const connection = await mysql.createConnection(info.config);
+        let sql = `REPLACE INTO comments SET ID = ${id}, userId=${updatedComment.userId},activityId=${updatedComment.activityId},allText="${updatedComment.allText}",dateCreated="${updatedComment.dateCreated}",dateModified="${updatedComment.dateModified}";`;
+        console.log(sql);
+        let data = await connection.query(sql);
+        await connection.end();
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw (500, 'An Error has occured');
+    }
+}
+
 //GET a comment by its id
 exports.getCommentByid = async (id) => {
     try {
