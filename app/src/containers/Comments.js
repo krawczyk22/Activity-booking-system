@@ -14,7 +14,7 @@ export class Comments extends Component {
         this.addComment = this.addNewComment.bind(this);
         this.state = {
             comments: [],
-            activityId: "",
+            activityid: "",
             newCommentText: "",
             currentEditingRow: {},
             editModalVisible: false
@@ -24,7 +24,7 @@ export class Comments extends Component {
     componentDidMount() {
         const { match: { params } } = this.props;
         this.setState({
-            activityId: params.foractivityid
+            activityid: params.foractivityid
         });
         fetch('http://localhost:3000/api/v1.0/comments/getcomments/' + params.foractivityid)
             .then(res => res.json())
@@ -59,8 +59,8 @@ export class Comments extends Component {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    "currentUser": localStorage.getItem("currentUser"),
-                    "activityid": this.state.activityId,
+                    "currentuser": localStorage.getItem("currentuser"),
+                    "activityid": this.state.activityid,
                     "alltext": this.state.newCommentText,
                     "datecreated": new Date(),
                     "datemodified": new Date()
@@ -85,12 +85,12 @@ export class Comments extends Component {
             visible: true,
         });
         let currentRowInformation = {
-            commentId: text.target.parentNode.parentNode.children[0].innerText,
-            userId: text.target.parentNode.parentNode.children[1].innerText,
-            activityId: text.target.parentNode.parentNode.children[2].innerText,
-            allText: this.state.newCommentText,
-            dateCreated: new Date(text.target.parentNode.parentNode.children[4].innerText),
-            dateModified: new Date()
+            commentid: text.target.parentNode.parentNode.children[0].innerText,
+            userid: text.target.parentNode.parentNode.children[1].innerText,
+            activityid: text.target.parentNode.parentNode.children[2].innerText,
+            alltext: this.state.newCommentText,
+            datecreated: new Date(text.target.parentNode.parentNode.children[4].innerText),
+            datemodified: new Date()
         }
         this.setState(
             {
@@ -104,11 +104,11 @@ export class Comments extends Component {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    "userid": this.state.currentEditingRow.userId,
-                    "activityid": this.state.currentEditingRow.activityId,
+                    "userid": this.state.currentEditingRow.userid,
+                    "activityid": this.state.currentEditingRow.activityid,
                     "alltext": this.state.newCommentText,
-                    "datecreated": this.state.currentEditingRow.dateCreated,
-                    "datemodified": this.state.currentEditingRow.dateModified
+                    "datecreated": this.state.currentEditingRow.datecreated,
+                    "datemodified": this.state.currentEditingRow.datemodified
                 })
             })
             .then(data => data.status)
@@ -133,19 +133,19 @@ export class Comments extends Component {
         return (
             <div className="viewCommentsPage">
                 <div>
-                    <h1>All Comments Activity {this.state.activityId}</h1>
-                    <a href={"/getcomments/" + this.state.activityId} id="backLink">Back to activity detail</a>
+                    <h1>All Comments Activity {this.state.activityid}</h1>
+                    <a href={"/getcomments/" + this.state.activityid} id="backLink">Back to activity detail</a>
 
                     <Table
                         dataSource={comments}
                         rowKey="Id"
                     >
-                        <Column title="Comment Id" dataIndex="Id" key="Id" />
-                        <Column title="User Id" dataIndex="userId" key="userId" />
-                        <Column title="Activity Id" dataIndex="activityId" key="activityId" />
-                        <Column title="Text" dataIndex="allText" key="allText" />
-                        <Column title="Creation Date" dataIndex="dateCreated" key="dateCreated" />
-                        <Column title="Modification Date" dataIndex="dateModified" key="dateModified" />
+                        <Column title="Comment Id" dataIndex="id" key="Id" />
+                        <Column title="User Id" dataIndex="userid" key="userid" />
+                        <Column title="Activity Id" dataIndex="activityid" key="activityid" />
+                        <Column title="Text" dataIndex="alltext" key="alltext" />
+                        <Column title="Creation Date" dataIndex="datecreated" key="datecreated" />
+                        <Column title="Modification Date" dataIndex="datemodified" key="datemodified" />
                         <Column
                             render={(text, record) => (<Button type="link" onClick={this.handleEditButton}>Edit</Button>)}
                         />

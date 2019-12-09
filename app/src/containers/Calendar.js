@@ -22,7 +22,7 @@ class CalendarComponent extends React.Component {
   }
 
   getDataFromServer() {
-    fetch('http://localhost:3000/api/v1.0/activities/Calendar')
+    fetch('http://localhost:3000/api/v1.0/activities/calendar')
       .then(data => data.json())
       .then(json => {       
         this.setState({
@@ -37,8 +37,8 @@ class CalendarComponent extends React.Component {
       let filteredData = []
       for (var i = 0; i < this.state.calendarItems.length; i++) {
         var item = this.state.calendarItems[i]
-        var dateFrom = new Date(item.from)
-        if (dateFrom.getFullYear() === date.year() && dateFrom.getMonth() === date.month() && dateFrom.getDate() === date.date()) {
+        var fromdate = new Date(item.from)
+        if (fromdate.getFullYear() === date.year() && fromdate.getMonth() === date.month() && fromdate.getDate() === date.date()) {
           filteredData.push(item)
         }
       }
@@ -52,7 +52,7 @@ class CalendarComponent extends React.Component {
     for (var i = 0; i < filtered.length; i++) {
       listData.push({
         type: 'success',
-        content: `Activity id : ${filtered[i].activityId}`
+        content: `Activity id : ${filtered[i].activityid}`
       })
     }
     return listData || [];
@@ -66,7 +66,7 @@ class CalendarComponent extends React.Component {
           {listData.map(item => (
             <li key={item.content}>
               {/* Change the href link to display the activity detail */}
-              <a href="/addactivity"><Badge status={item.type} text={item.content} /></a>
+              <a href={"/activity/" + item.activityid}><Badge status={item.type} text={item.content} /></a>
             </li>
           ))}
         </ul>
