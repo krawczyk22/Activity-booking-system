@@ -34,7 +34,7 @@ exports.addComment = async (comment) => {
 exports.updateComment = async (id, updatedComment) => {
     try {
         const connection = await mysql.createConnection(info.config);
-        let sql = `REPLACE INTO comments SET ID = ${id}, userId=${updatedComment.userId},activityId=${updatedComment.activityId},allText="${updatedComment.allText}",dateCreated="${updatedComment.dateCreated}",dateModified="${updatedComment.dateModified}";`;
+        let sql = `REPLACE INTO comments SET ID = ${id}, userid=${updatedComment.userid},activityid=${updatedComment.activityid},alltext="${updatedComment.alltext}",datecreated="${updatedComment.datecreated}",datemodified="${updatedComment.datemodified}";`;
         console.log(sql);
         let data = await connection.query(sql);
         await connection.end();

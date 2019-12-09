@@ -28,8 +28,8 @@ exports.addActivity = async (activity) => {
 	            let check = await connection.query(sqlUserCheck);
 	
 	            if(check.length == 0){ 
+                    await connection.end();
 	                throw {message:'Tagged user does not exist', status:400};
-	                await connection.end();
 	            }
 	            else{
 	
@@ -172,6 +172,20 @@ exports.getActivityByUserTagged = async (id) => {
     }
 }
 
+exports.getAllActivitiesUserTaggedIn = async(taggedUserId)=>{
+    try{
+        const connection =await mysql.createConnection(info.config);
+        let sql =`SELECT * FROM taggedusers WHERE taggeduserid=${taggedUserId}`;
+        let data = await connection.query(sql);
+        await connection.end();
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw (500, 'An Error has occured');
+
+    }
+}
+
 //get all activities within a Date range
 exports.getActivityDateRange = async (fromdate, todate) => {
     try {
@@ -180,7 +194,7 @@ exports.getActivityDateRange = async (fromdate, todate) => {
         const connection = await mysql.createConnection(info.config);
 
         //this is the sql statement to execute
-        let sql = `SELECT * FROM activity INNER JOIN calendar ON activity.ID = calendar.activityit WHERE calendar.fromdate = ${fromdate} AND calendar.todate = ${todate}
+        let sql = `SELECT * FROM activity INNER JOIN calendar ON activity.ID = calendar.activityit WHERE calendar.fromdate >= ${fromdate} AND calendar.todate >= ${todate}
             `;
         //wait for the async code to finish
         let data = await connection.query(sql);
@@ -242,18 +256,18 @@ exports.updateActivity = async (id, activity) => {
 }
 
 //Adding all activities to calendar
-exports.addActivitiesToCalendar = async (activityId, userId, fromTime, toTime) => {
+exports.addActivitiesToCalendar = async (activityid, userid, fromtime, totime) => {
     try {
-        let activityLocation = await this.getActivityById(activityId)
+        let activityLocation = await this.getActivityById(activityid)
         activityLocation = activityLocation[0].location
         console.log(activityLocation)
         const connection = await mysql.createConnection(info.config);
         let calendarItem = {
-            from: fromTime,
-            to: toTime,
+            from: fromtime,
+            to: totime,
             location: activityLocation,
-            userId: userId,
-            activityId: activityId
+            userid: userid,
+            activityid: activityid
         }
         let sql = `INSERT INTO calendar SET ?`;
         let data = await connection.query(sql, calendarItem);
@@ -262,6 +276,20 @@ exports.addActivitiesToCalendar = async (activityId, userId, fromTime, toTime) =
     } catch (error) {
         console.log(error);
         throw (500, 'An Error has occured');
+    }
+}
+
+exports.getCalendar= async()=>{
+    try{
+        const connection =await mysql.createConnection(info.config);
+        let sql =`SELECT * FROM calendar`;
+        let data = await connection.query(sql);
+        await connection.end();
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw (500, 'An Error has occured');
+
     }
 }
 
@@ -277,19 +305,5 @@ exports.getActivityById = async (id) => {
         //if an error occured, please log it and throw exception
         console.log(error)
         throw (500, 'An error has occured')
-    }
-}
-
-exports.getCalendar= async()=>{
-    try{
-        const connection =await mysql.createConnection(info.config);
-        let sql =`SELECT * FROM calendar`;
-        let data = await connection.query(sql);
-        await connection.end();
-        return data;
-    } catch (error) {
-        console.log(error);
-        throw (500, 'An Error has occured');
-
     }
 }

@@ -22,7 +22,7 @@ router.get('/getall/', async (cnx, next) =>{
     cnx.body = await model.getAllActivity(id);
  });
 
-//getting all the activities by user
+//getting all the activities by their ids
 router.get('/getactivities/:id([0-9]{1,})', async (cnx, next) =>{
     let id = cnx.params.id;
     cnx.body = await model.getActivityByUser(id);
@@ -31,7 +31,7 @@ router.get('/getactivities/:id([0-9]{1,})', async (cnx, next) =>{
  //get all activities a user is tagged in
  router.get('/getactivitiestagged/:id', async (cnx, next) =>{
     let id = cnx.params.id;
-    cnx.body = await model.getActivityByUserTagged(id);
+    cnx.body = await model.getAllActivitiesUserTaggedIn(id);
  });
 
   //get all activities within a Date Range
@@ -59,7 +59,6 @@ router.post('/insert/', bodyParser(), async (cnx, next) =>{
                 description:cnx.request.body.values.description, 
                 url:cnx.request.body.values.url, 
                 location:cnx.request.body.values.location,
-                taggeduserid:cnx.request.body.values.taggeduserid
             };
 
             //calling the function and passing the data to it
@@ -94,10 +93,10 @@ router.put('/put/:id([0-9]{1,})', bodyParser(), async (cnx, next) =>{
             //creating a variable that holds the information provided by the user
             let id = cnx.params.id;
             let updateActivity = {
-                title:cnx.request.body.values.title, 
-                description:cnx.request.body.values.description, 
-                url:cnx.request.body.values.url, 
-                location:cnx.request.body.values.location
+                title:cnx.request.body.title, 
+                description:cnx.request.body.description, 
+                url:cnx.request.body.url, 
+                location:cnx.request.body.location
             };
             //calling the function and passing the data to it
             await model.updateActivity(id, updateActivity);
@@ -117,10 +116,11 @@ router.post('/', bodyParser(), async(cnx,next)=>{
     };
     let addedActivity = await model.addActivity(activity);
     let now = new Date()
-    let fromTime = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:00`
-    let toTime = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${now.getHours() + 1}:${now.getMinutes()}:00`
-    let currentUser = await userModel.getUserByUsername(cnx.request.body.currentUser)
-    await model.addActivitiesToCalendar(addedActivity.insertId, currentUser[0].Id, fromTime, toTime)
+    let fromtime = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:00`
+    let totime = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${now.getHours() + 1}:${now.getMinutes()}:00`
+
+    let currentuser = await userModel.getUserByUsername(cnx.request.body.currentuser)
+    await model.addActivitiesToCalendar(addedActivity.insertId, currentuser[0].Id, fromtime, totime)
     cnx.response.status = 201;
     cnx.body = { message: "added successfully" };
 });

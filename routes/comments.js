@@ -37,16 +37,16 @@ router.post('/insertComment/', bodyParser(), async (cnx, next) =>{
 //Edit a comment
 router.put('/:id',bodyParser(), async(cnx,next)=>{
     let updatedComment={
-        userId:cnx.request.body.userId,
-        activityId:cnx.request.body.activityId,
-        allText:cnx.request.body.allText,
-        dateCreated:cnx.request.body.dateCreated,
-        dateModified:cnx.request.body.dateModified
+        userid:cnx.request.body.userid,
+        activityid:cnx.request.body.activityid,
+        alltext:cnx.request.body.alltext,
+        datecreated:cnx.request.body.datecreated,
+        datemodified:cnx.request.body.datemodified
     };
-    let dateCreatedFormat = new Date(updatedComment.dateCreated)
-    let dateModifiedFormat = new Date(updatedComment.dateModified)
-    updatedComment.dateCreated = `${dateCreatedFormat.getFullYear()}-${dateCreatedFormat.getMonth() + 1}-${dateCreatedFormat.getDate()} ${dateCreatedFormat.getHours()}:${dateCreatedFormat.getMinutes()}:00`
-    updatedComment.dateModified = `${dateModifiedFormat.getFullYear()}-${dateModifiedFormat.getMonth() + 1}-${dateModifiedFormat.getDate()} ${dateModifiedFormat.getHours()}:${dateModifiedFormat.getMinutes()}:00`
+    let dateCreatedFormat = new Date(updatedComment.datecreated)
+    let dateModifiedFormat = new Date(updatedComment.datemodified)
+    updatedComment.datecreated = `${dateCreatedFormat.getFullYear()}-${dateCreatedFormat.getMonth() + 1}-${dateCreatedFormat.getDate()} ${dateCreatedFormat.getHours()}:${dateCreatedFormat.getMinutes()}:00`
+    updatedComment.datemodified = `${dateModifiedFormat.getFullYear()}-${dateModifiedFormat.getMonth() + 1}-${dateModifiedFormat.getDate()} ${dateModifiedFormat.getHours()}:${dateModifiedFormat.getMinutes()}:00`
     await model.updateComment(cnx.params.id,updatedComment);
     cnx.response.status = 200;
     cnx.body={message:"updated successfully"};
